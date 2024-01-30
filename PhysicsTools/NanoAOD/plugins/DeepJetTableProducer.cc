@@ -184,9 +184,9 @@ private:
   typedef std::vector<reco::DeepFlavourTagInfo> TagInfoCollection;
   const edm::EDGetTokenT<TagInfoCollection> tag_info_src_;
 
-  constexpr static unsigned n_cpf_ = 3;
-  constexpr static unsigned n_npf_ = 3;
-  constexpr static unsigned n_sv_ = 4;  // 5
+  constexpr static unsigned n_cpf_ = 25;
+  constexpr static unsigned n_npf_ = 25;
+  constexpr static unsigned n_sv_ = 12;  // 5
 
   constexpr static double jetR_ = 0.4;
 
