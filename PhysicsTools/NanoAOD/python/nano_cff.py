@@ -28,7 +28,8 @@ from PhysicsTools.NanoAOD.NanoAODEDMEventContent_cff import *
 from PhysicsTools.NanoAOD.fsrPhotons_cff import *
 from PhysicsTools.NanoAOD.softActivity_cff import *
 from PhysicsTools.NanoAOD.l1trig_cff import *
-
+from PhysicsTools.NanoAOD.custom_btv_cff import *
+from PhysicsTools.NanoAOD.btvMC_cff import * 
 nanoMetadata = cms.EDProducer("UniqueStringProducer",
     strings = cms.PSet(
         tag = cms.string("untagged"),
@@ -284,3 +285,27 @@ def nanoL1TrigObjCustomizeFull(process):
     process.nanoTableTaskCommon.add(process.l1TablesTask)
     return process
 
+
+
+
+
+    
+def PrepBTVCustomNanoAOD_MC(process):
+    addPFCands(process,btvNano_switch.btvNano_addallPF_switch,btvNano_switch.btvNano_addAK4_switch,btvNano_switch.btvNano_addAK8_switch)
+    add_BTV(process, btvNano_switch.btvNano_addAK4_switch,btvNano_switch.btvNano_addAK8_switch,btvNano_switch.TaggerInput)
+    customize_BTV_GenTable(process)
+    if btvNano_switch.btvNano_addallPF_switch:
+        process.nanoSequenceMC+=allPFPFCandsMCSequence
+    else:
+        if btvNano_switch.btvNano_addAK4_switch and btvNano_switch.btvNano_addAK8_switch :
+            process.nanoSequenceMC+=process.nanoSequenceMC+ak4ak8PFCandsMCSequence
+        elif btvNano_switch.btvNano_addAK4_switch and not btvNano_switch.btvNano_addAK8_switch :
+            process.nanoSequenceMC+=ak4onlyPFCandsMCSequence
+        elif not btvNano_switch.btvNano_addAK4_switch and btvNano_switch.btvNano_addAK8_switch:
+            process.nanoSequenceMC+=ak8onlyPFCandsMCSequence
+    return process
+def PrepBTVCustomNanoAOD_DATA(process):
+    # only run if SFvar or allPFCands
+    addPFCands(process,btvNano_switch.btvNano_addallPF_switch,btvNano_switch.btvNano_addAK4_switch,btvNano_switch.btvNano_addAK8_switch)
+    add_BTV(process, btvNano_switch.btvNano_addAK4_switch,btvNano_switch.btvNano_addAK8_switch,btvNano_switch.TaggerInput)
+    return process
